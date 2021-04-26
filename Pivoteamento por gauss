@@ -1,0 +1,154 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int opt, n, conf1, conf2;
+    scanf("%d", &n);
+    float matriz_A[n][n+1], vetor_B[n], c, soma = 0.0, R[n];
+    int X[n];
+/* Matriz e Vetor = 0 se o usuario nao dar valor */
+    for (int i = 0 ; i < n ; i++){
+            vetor_B[i] = 0;
+        for (int a = 0 ; a < n ; a++){
+            matriz_A[a][i] = 0;
+
+        }
+    }
+    /* Valores para printar x1, x2 ... xn */
+    for (int i = 0 ; i < n ; i++){
+        X[i] = i + 1;
+    }
+    do{
+            /* Menu */
+    printf("Escolha uma das opcoes abaixo:\n");
+    printf("1) Ler Matriz A e vetor B\n");
+    printf("2) Imprimir na tela o sistema Ax=b\n");
+    printf("3) Resolver sistema Ax=b\n");
+    printf("4) Sair\n");
+    printf("(Aperte o numero correspondente a sua opcao)\n");
+    scanf("%d" , &opt);
+
+    switch (opt){
+    case 1 :
+        do{
+        /* Pegando os valores da matriz A*/
+        printf("Digite os valores da matriz A: \n");
+        for(int i = 0 ; i < n ; i++){
+            for(int a = 0 ; a < n ; a++){
+                printf("[%d] [%d]: ", i+1, a+1);
+                scanf("%f", &matriz_A[i][a]);
+            }
+        }
+        /* Printar a matriz A */
+        printf("A sua Matriz A e essa? \n");
+        for(int i = 0 ; i < n ; i++){
+                printf("\n");
+                printf("|");
+            for(int a = 0 ; a < n ; a++){
+                printf(" %.2f ", matriz_A[i][a]);
+            }
+            printf("|");
+        }
+        /* Confirmar matriz A */
+        printf("\n(1) SIM       (2) NAO\n");
+        scanf("%d", &conf1);
+        if (conf1 != 2 && conf1 != 1){
+            printf("Voce inseriu um numero errado.\n");
+            conf1 = 0;
+        }}
+        while (conf1 != 1);
+        do{
+        /* Pegando os valores do vetor B */
+        printf("Digite os valores do Vetor B: \n");
+        for (int i = 0 ; i < n ; i++){
+            printf("[%d]: ", i+1);
+            scanf("%f", &vetor_B[i]);
+        }
+        /* Printar o vetor B */
+        printf("Seu vetor B e esse?\n");
+        for(int i = 0 ; i < n ; i++){
+            printf("| %.2f |\n", vetor_B[i]);
+            }
+            /*Confirmacao Vetor B */
+        printf("\n(1) SIM       (2) NAO\n");
+        scanf("%d", &conf2);
+        if (conf2 != 2 && conf2 != 1){
+            printf("Voce inseriu um numero errado.\n");
+            conf2 = 0;
+        }
+            }
+        while (conf2 != 1);
+        opt = 1;
+        break;
+            /* Imprimir Ax = B */
+    case 2 :
+        for(int i = 0 ; i < n ; i++){
+            printf("\n");
+            printf("|");
+        for(int a = 0 ; a < n ; a++){
+            printf(" %.2f ", matriz_A[i][a]);
+            }
+            printf("|   ");
+            printf(" | x%d | | %.2f |", X[i], vetor_B[i]);
+            }
+        printf("\n\n");
+        opt = 2;
+        break;
+        /* Pivoteamento por teorema de Gauss */
+    case 3 :
+        for(int i = 0 ; i < n ; i++){
+            matriz_A[i][n] = vetor_B[i];
+        }
+        for(int j = 0 ; j < n ; j++){
+            for(int i = 0 ; i < n; i++){
+                if(i>j){
+                    c = -(matriz_A[i][j]/matriz_A[j][j]);
+                    for(int k = 0; k < n+1 ; k++){
+                        matriz_A[i][k] = c*matriz_A[j][k] + matriz_A[i][k];
+                    }
+                }
+            }
+        }
+        for(int i = 0 ; i < n ; i++){
+            vetor_B[i] = matriz_A[i][n];
+        }
+        printf("\n");
+        for(int i = 0 ; i < n ; i++){
+            printf("|");
+            for(int j = 0 ; j < n; j++){
+            printf(" %.2f ", matriz_A[i][j]);
+            }
+            printf("|");
+            printf("      |%.2f|", vetor_B[i]);
+            printf("\n");
+        }
+        printf("\n\n");
+        n = n-1;
+        R[n] = matriz_A[n][n+1] / matriz_A[n][n];
+        n = n+1;
+            for(int i = n - 2 ; i >= 0 ; i--){
+                soma = 0;
+                for(int j = i + 1 ; j <= n ; j++){
+                    soma = soma + matriz_A[i][j]*R[j];
+                }
+                R[i] = (matriz_A[i][n] - soma)/ matriz_A[i][i];
+            }
+            /* Printar vetor X */
+            printf("VETOR X\n");
+            for(int i = 0 ; i < n ; i++){
+            printf("| %.2f |\n",R[i]);
+            }
+        opt = 3;
+        break;
+        /* Saida do programa */
+    case 4 :
+        printf("Saindo...");
+        return 0;
+        break;
+    default :
+        printf("Voce inseriu um valor invalido, tente novamente\n");
+    }}
+    while (opt != 0);
+    return 0;
+}
